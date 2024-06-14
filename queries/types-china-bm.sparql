@@ -1,0 +1,26 @@
+# Query to find all British Museum object types related to China
+# by Andreas Vlachidis
+
+PREFIX ecrm: <http://erlangen-crm.org/current/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX slb: <http://sloanelab.org/>
+
+SELECT DISTINCT ?record ?label
+
+WHERE {
+	# All records of information object type containing catalogue items (place and object type)
+	?record ecrm:P106_is_composed_of ?cat_item_place;
+	ecrm:P106_is_composed_of ?cat_item_obj_type;
+	rdf:type ecrm:E73_Information_Object.
+	# The record originates from the British Museum collection
+	?record ecrm:P129_is_about ?object.
+	?object ecrm:P50_has_current_keeper <http://sloanelab.org/E74/British_Museum>.
+	# Catalogue items refers to place China
+	?cat_item_place slb:SL10_specifically_refers_to <http://sloanelab.org/E53/China>.
+	# Catalogue items refers to an object type
+	?cat_item_obj_type slb:SL10_specifically_refers_to ?type.
+	?type ecrm:P2_has_type <http://sloanelab.org/E55/object_type>.
+	?type rdfs:label ?label
+}
+ORDER BY ?label

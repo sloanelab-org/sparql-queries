@@ -1,0 +1,23 @@
+# Query to find all subjects with labels and counts
+
+PREFIX ecrm: <http://erlangen-crm.org/current/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX slb: <http://sloanelab.org/>
+
+SELECT ?subject ?label (COUNT(?item) AS ?count)
+
+WHERE {
+	
+	# get all subjects
+	?subject ecrm:P2_has_type <http://sloanelab.org/E55/subject> .
+
+	# get catalogue items referring to subjects
+	?item slb:SL10_specifically_refers_to ?subject .
+
+	# get subject labels
+	?subject rdfs:label ?label .
+}
+
+GROUP BY ?subject ?label
+
+ORDER BY ?label

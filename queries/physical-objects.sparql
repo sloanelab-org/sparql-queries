@@ -1,0 +1,22 @@
+# Query to find all physical objects with types
+
+PREFIX ecrm: <http://erlangen-crm.org/current/> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+
+SELECT ?obj ?objLabel ?type ?typeLabel
+
+WHERE {
+	# get physical objects
+	?obj a ecrm:E19_Physical_Object .
+	
+	# get physical object types
+	?obj ecrm:P2_has_type ?type .
+	
+	# get physical object labels
+	?obj rdfs:label ?objLabel .
+	
+	# get type labels
+	?obj rdfs:label ?typeLabel .
+}
+
+ORDER BY ?infoLabel

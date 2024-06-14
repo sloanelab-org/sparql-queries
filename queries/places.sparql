@@ -1,0 +1,29 @@
+# Query to find all places with labels, descriptions, coordinates, and counts
+
+PREFIX ecrm: <http://erlangen-crm.org/current/> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX slb: <http://sloanelab.org/>
+
+SELECT ?place ?label ?desc ?geo (COUNT(?item) AS ?count)
+
+WHERE {
+	
+	# get all places
+	?place a ecrm:E53_Place .
+
+	# get catalogue items referring to places
+	?item slb:SL10_specifically_refers_to ?place .
+
+	# get place labels
+	?place rdfs:label ?label .
+
+	# get place descriptions
+	?place rdfs:comment ?desc .
+
+	# get geographic coordinates
+	?place ecrm:P168_place_is_defined_by ?geo .
+}
+
+GROUP BY ?place ?label ?desc ?geo
+
+ORDER BY ?label

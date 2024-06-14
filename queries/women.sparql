@@ -1,0 +1,29 @@
+# Query to find all women
+
+PREFIX ecrm: <http://erlangen-crm.org/current/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX slb: <http://sloanelab.org/>
+
+SELECT ?person ?label ?desc (COUNT(?item) AS ?count)
+
+WHERE {
+	
+	# get all people
+	?person a ecrm:E21_Person .
+
+	# get only women
+	?person ecrm:P2_has_type <http://sloanelab.org/E55/Woman> .
+
+	# get catalogue items referring to people
+	?item slb:SL10_specifically_refers_to ?person .
+
+	# get people labels
+	?person rdfs:label ?label .
+
+	# get people descriptions
+	?person rdfs:comment ?desc .
+}
+
+GROUP BY ?person ?label ?desc
+
+ORDER BY ?label

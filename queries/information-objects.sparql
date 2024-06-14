@@ -1,0 +1,25 @@
+# Query to find all information objects with labels and descriptions
+
+PREFIX ecrm: <http://erlangen-crm.org/current/> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+
+SELECT ?info ?infoLabel ?infoDesc ?type ?typeLabel
+
+WHERE {
+	# get information objects
+	?info a ecrm:E73_Information_Object .
+	
+	# get inofrmation object types
+	?info ecrm:P2_has_type ?type .
+	
+	# get information object labels
+	?info rdfs:label ?infoLabel .
+
+	# get information object descriptions
+	?info rdfs:comment ?infoDesc .
+
+	# get type labels
+	?type rdfs:label ?typeLabel .
+}
+
+ORDER BY ?infoLabel

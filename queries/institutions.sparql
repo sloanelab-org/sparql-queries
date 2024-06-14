@@ -1,0 +1,20 @@
+# Query to find all physical objects with labels
+
+PREFIX ecrm: <http://erlangen-crm.org/current/> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+
+SELECT DISTINCT ?institution ?label
+
+WHERE {
+
+	# get all physical objects
+	?object a ecrm:E19_Physical_Object.
+
+	# get institutions holding the objects
+	?object ecrm:P50_has_current_keeper ?institution.
+
+	# get institution labels
+	?institution rdfs:label ?label
+}
+
+ORDER BY ?label

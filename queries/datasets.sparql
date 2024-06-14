@@ -1,0 +1,25 @@
+# Query to find all datasets with labels and descriptions
+
+PREFIX ecrm: <http://erlangen-crm.org/current/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+PREFIX crmdig: <http://www.ics.forth.gr/isl/CRMdig/>
+
+SELECT ?dataset ?label ?desc
+
+WHERE {
+	# Get all datasets
+	?dataset a crmdig:D1_Digital_Object .
+
+	# Get dataset types
+	?dataset ecrm:P2_has_type ?type .
+
+	# Get dataset labels
+	?dataset rdfs:label ?label.
+
+	# Get dataset descriptions
+	OPTIONAL {
+		?dataset rdfs:comment ?desc.
+	}
+}
+
+ORDER BY ?dataset

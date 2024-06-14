@@ -1,0 +1,25 @@
+# Query to find objects related to China across all historical
+# records and find the most popular related people by count
+# by Andreas Vlachidis
+
+PREFIX slb: <http://sloanelab.org/>
+PREFIX ecrm: <http://erlangen-crm.org/current/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?person (GROUP_CONCAT(?record; separator="| ") AS ?allItems) (COUNT(?record) AS ?itemCount)
+
+WHERE {
+	# All historic records (catalogue entries) of information object type containing catalogue items (place and person)
+	?record ecrm:P106_is_composed_of ?cat_item_place;
+		ecrm:P106_is_composed_of ?cat_item_person;
+		ecrm:P2_has_type <http://sloanelab.org/E55/catalogue_entry>;
+		rdf:type ecrm:E73_Information_Object.
+	# Catalogue items refers to place China
+	?cat_item_place slb:SL10_specifically_refers_to <http://sloanelab.org/E53/China>.
+	# Catalogue items refers to a person
+	?cat_item_person slb:SL10_specifically_refers_to ?person.
+	?person rdf:type ecrm:E21_Person.
+}
+GROUP BY ?person
+ORDER BY DESC(?itemCount)

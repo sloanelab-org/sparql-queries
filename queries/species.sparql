@@ -1,0 +1,23 @@
+# Query to find all species with labels and counts
+
+PREFIX ecrm: <http://erlangen-crm.org/current/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX slb: <http://sloanelab.org/>
+
+SELECT ?species ?label (COUNT(?item) AS ?count)
+
+WHERE {
+	
+	# get all species
+	?species ecrm:P2_has_type <http://sloanelab.org/E55/species> .
+
+	# get catalogue items referring to species
+	?item slb:SL10_specifically_refers_to ?species .
+
+	# get species labels
+	?species rdfs:label ?label .
+}
+
+GROUP BY ?species ?label
+
+ORDER BY ?label

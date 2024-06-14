@@ -1,0 +1,18 @@
+# Query to find all objects related to China
+# by Andreas Vlachidis
+
+PREFIX ecrm: <http://erlangen-crm.org/current/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX slb: <http://sloanelab.org/>
+
+SELECT DISTINCT ?record
+
+WHERE {
+	# All records of information object type containing catalogue items
+	?record ecrm:P106_is_composed_of ?cat_item_place;
+	rdf:type ecrm:E73_Information_Object.
+	# Catalogue items refers to place China
+	?cat_item_place slb:SL10_specifically_refers_to <http://sloanelab.org/E53/China>
+}
+ORDER BY ?record

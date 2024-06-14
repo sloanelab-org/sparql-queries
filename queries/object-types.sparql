@@ -1,0 +1,23 @@
+# Query to find all physical object types with labels and counts
+
+PREFIX ecrm: <http://erlangen-crm.org/current/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX slb: <http://sloanelab.org/>
+
+SELECT ?type ?label (COUNT(?item) AS ?count)
+
+WHERE {
+	
+	# get all physical object types
+	?type ecrm:P2_has_type <http://sloanelab.org/E55/object_type> .
+
+	# get catalogue items referring to physical object types
+	?item slb:SL10_specifically_refers_to ?type .
+
+	# get type labels
+	?type rdfs:label ?label .
+}
+
+GROUP BY ?type ?label
+
+ORDER BY ?label

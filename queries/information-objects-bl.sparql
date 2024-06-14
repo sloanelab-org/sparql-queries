@@ -1,0 +1,22 @@
+# Query to find all information objects (records) from the British Library
+
+PREFIX ecrm: <http://erlangen-crm.org/current/> 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+
+SELECT ?info ?infoLabel
+
+WHERE {
+	# get information objects
+	?info a ecrm:E73_Information_Object .
+	
+	# get physical object labels
+	?info rdfs:label ?infoLabel .
+
+	# get physical object described in record
+	?info ecrm:P129_is_about ?obj .
+
+	# get institutions holding the objects
+	?obj ecrm:P50_has_current_keeper <http://sloanelab.org/E74/British_Library> .
+}
+
+ORDER BY ?infoLabel

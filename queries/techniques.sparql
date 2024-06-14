@@ -1,0 +1,23 @@
+# Query to find all techniques with labels and counts
+
+PREFIX ecrm: <http://erlangen-crm.org/current/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX slb: <http://sloanelab.org/>
+
+SELECT ?technique ?label (COUNT(?item) AS ?count)
+
+WHERE {
+	
+	# get all techniques
+	?technique ecrm:P2_has_type <http://sloanelab.org/E55/technique> .
+
+	# get catalogue items referring to techniques
+	?item slb:SL10_specifically_refers_to ?technique .
+
+	# get technique labels
+	?technique rdfs:label ?label .
+}
+
+GROUP BY ?technique ?label
+
+ORDER BY ?label

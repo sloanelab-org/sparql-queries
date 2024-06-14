@@ -1,0 +1,26 @@
+# Query to find object types related to China across all
+# contemporary records and find the most popular by count
+# by Andreas Vlachidis
+
+PREFIX slb: <http://sloanelab.org/>
+PREFIX ecrm: <http://erlangen-crm.org/current/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?object_type (SAMPLE(?cat_item_obj_type) AS ?sampleItem) (COUNT(?cat_item_obj_type) AS ?itemCount)
+
+WHERE {
+	# All contemprary museum records of information object type containing catalogue items (place and object type)
+	?record ecrm:P106_is_composed_of ?cat_item_place;
+		ecrm:P106_is_composed_of ?cat_item_obj_type;
+		ecrm:P2_has_type <http://sloanelab.org/E55/museum_record>;
+		rdf:type ecrm:E73_Information_Object.
+	# Catalogue items refers to place China
+	?cat_item_place slb:SL10_specifically_refers_to <http://sloanelab.org/E53/China>.
+	# Catalogue items refers to an object type
+	?cat_item_obj_type slb:SL10_specifically_refers_to ?object_type.
+	?object_type ecrm:P2_has_type <http://sloanelab.org/E55/object_type>.
+	?object_type rdfs:label ?label 
+}
+GROUP BY ?object_type
+ORDER BY DESC(?itemCount)

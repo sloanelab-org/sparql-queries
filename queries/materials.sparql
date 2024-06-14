@@ -1,0 +1,23 @@
+# Query to find all materials with labels and counts
+
+PREFIX ecrm: <http://erlangen-crm.org/current/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX slb: <http://sloanelab.org/>
+
+SELECT ?material ?label (COUNT(?item) AS ?count)
+
+WHERE {
+	
+	# get all materials
+	?material a ecrm:E57_Material .
+
+	# get catalogue items referring to materials
+	?item slb:SL10_specifically_refers_to ?material .
+
+	# get material labels
+	?material rdfs:label ?label .
+}
+
+GROUP BY ?material ?label
+
+ORDER BY ?label
